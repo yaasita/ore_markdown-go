@@ -33,7 +33,27 @@ func main() {
 	switch flag.Args()[0] {
 	case "markdown":
 		writer.WriteString("\n" + `<div class="container"> ` + "\n")
-		output := blackfriday.MarkdownCommon([]byte(input))
+		var output []byte
+		{
+			htmlflag := blackfriday.HTML_USE_XHTML |
+				blackfriday.HTML_USE_SMARTYPANTS |
+				blackfriday.HTML_SMARTYPANTS_FRACTIONS |
+				blackfriday.HTML_SMARTYPANTS_DASHES |
+				blackfriday.HTML_SMARTYPANTS_LATEX_DASHES
+			renderer := blackfriday.HtmlRenderer(htmlflag, "", "")
+			optflag := blackfriday.EXTENSION_NO_INTRA_EMPHASIS |
+				blackfriday.EXTENSION_TABLES |
+				blackfriday.EXTENSION_FENCED_CODE |
+				blackfriday.EXTENSION_AUTOLINK |
+				blackfriday.EXTENSION_STRIKETHROUGH |
+				blackfriday.EXTENSION_SPACE_HEADERS |
+				blackfriday.EXTENSION_HEADER_IDS |
+				blackfriday.EXTENSION_BACKSLASH_LINE_BREAK |
+				blackfriday.EXTENSION_DEFINITION_LISTS |
+				blackfriday.EXTENSION_HARD_LINE_BREAK
+			opt := blackfriday.Options{Extensions: optflag}
+			output = blackfriday.MarkdownOptions(input, renderer, opt)
+		}
 		writer.WriteString(string(output))
 		writer.WriteString("\n" + `</div>` + "\n")
 	case "presentation":
