@@ -7,6 +7,7 @@ import (
 	"github.com/russross/blackfriday"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 var in *string = flag.String("in", "", "input file")
@@ -54,7 +55,7 @@ func main() {
 			opt := blackfriday.Options{Extensions: optflag}
 			output = blackfriday.MarkdownOptions(input, renderer, opt)
 		}
-		writer.WriteString(string(output))
+		writer.WriteString(embedded_image(string(output), filepath.Dir(*in)))
 		writer.WriteString("\n" + `</div>` + "\n")
 	case "presentation":
 		writer.WriteString("\n" + `<textarea id="source">` + "\n" + `class: center, middle`)
