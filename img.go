@@ -18,7 +18,7 @@ func embedded_image(html string, directory string) string {
 			alt_tag := string(group[2])
 			image_data, err := ioutil.ReadFile(directory + string(os.PathSeparator) + image_file)
 			if err != nil {
-				panic(err)
+				continue
 			}
 			// mime type
 			mimeType := http.DetectContentType(image_data)
